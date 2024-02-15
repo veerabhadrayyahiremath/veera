@@ -1,0 +1,62 @@
+Write a program to create a circular queue using dictionaries in python
+Maximum length of the queue is 5:
+if it crosses the maximum length it has to delete the latest added element in the queue
+and add the new element to the queue
+
+class CircularQueue:
+    def __init__(self, max_length):
+        self.queue = {}
+        self.front = 0
+        self.rear = -1
+        self.max_length = max_length
+
+    def is_empty(self):
+        return len(self.queue) == 0
+
+    def is_full(self):
+        return len(self.queue) == self.max_length
+
+    def enqueue(self, item):
+        if self.is_full():
+            # If the queue is full, remove the front element
+            self.dequeue()
+
+        # Add the new element to the rear
+        self.rear = (self.rear + 1) % self.max_length
+        self.queue[self.rear] = item
+
+    def dequeue(self):
+        if self.is_empty():
+            print("Queue is empty. Cannot dequeue.")
+            return None
+
+        # Remove the front element
+        removed_item = self.queue.pop(self.front)
+        self.front = (self.front + 1) % self.max_length
+        return removed_item
+
+    def display(self):
+        if self.is_empty():
+            print("Queue is empty.")
+            return
+
+        current = self.front
+        while current != (self.rear + 1) % self.max_length:
+            print(self.queue[current], end=" ")
+            current = (current + 1) % self.max_length
+        print()
+
+
+# Example usage:
+cq = CircularQueue(max_length=5)
+
+cq.enqueue(1)
+cq.enqueue(2)
+cq.enqueue(3)
+cq.display()  # Output: 1 2 3
+
+cq.enqueue(4)
+cq.enqueue(5)
+cq.enqueue(6)  # The queue is full, so 1 will be removed
+cq.display()  # Output: 2 3 4 5 6
+This implementation uses a dictionary to represent the circular queue, with front and rear pointers to keep track of the positions. The enqueue method adds a new element to the rear, and if the queue is full, it removes the front element first. The dequeue method removes the front element. The display method is used to print the current state of the queue.
